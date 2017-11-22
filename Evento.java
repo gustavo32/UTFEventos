@@ -6,6 +6,15 @@ public class Evento {
 	private String local;
 	private Organizador organizador;
 
+	public Evento(int id, String nome, String descricao, String data, String local, Organizador organizador){
+		this.id=id;
+		this.nome=nome;
+		this.descricao=descricao;
+		this.data=data;
+		this.local=local;
+		this.organizador=organizador;
+	}
+
 	public void setId(int id){
 		this.id = id;
 	}
@@ -21,7 +30,7 @@ public class Evento {
 	public void setLocal(String local){
 		this.local = local;
 	}
-	public void setOrganizador(String organizador){
+	public void setOrganizador(Organizador organizador){
 		this.organizador = organizador;
 	}
 	public int getId(){
@@ -40,6 +49,6 @@ public class Evento {
 		return local;
 	}
 	public Organizador getOrganizador(){
-		return nome;
+		return organizador;
 	}
 }
