@@ -28,6 +28,8 @@ public class SGBDConnection {
     Connection connection = null;          //atributo do tipo Connection
 
     try {
+      //setando o Driver jdbc
+      Class.forName("com.mysql.jdbc.Driver");
 
       // Configurando a nossa conexão com um banco de dados//
 
@@ -58,7 +60,7 @@ public class SGBDConnection {
 
 
     }
-/*
+
     catch (ClassNotFoundException e) {  //Driver não encontrado
 
       System.out.println("O driver expecificado nao foi encontrado.");
@@ -66,7 +68,7 @@ public class SGBDConnection {
       return null;
 
     }
-*/
+
     catch (SQLException e) {
 
       //Não conseguindo se conectar ao banco
