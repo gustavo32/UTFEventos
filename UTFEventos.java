@@ -16,7 +16,8 @@ public class UTFEventos {
 	private JFrame frame;
 	JButton btnAtualizar = new JButton("Atualizar");
 	JScrollPane scrollPane = new JScrollPane();
-	JList<String> list = new JList<String>();
+	@SuppressWarnings("rawtypes")
+	JList list = new JList();
 	DefaultListModel<String> listModel = new DefaultListModel<String>();
 	ArrayList<Evento> eventArray = new ArrayList<Evento>();
 
