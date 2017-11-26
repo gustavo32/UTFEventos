@@ -73,19 +73,16 @@ public class BD {
 		PreparedStatement stmt = null;
 		String sql = "insert into Evento (EVE_ID, EVE_NOME, EVE_DESCRICAO, EVE_DATA, EVE_LOCAL, FK_ORG_CPFCNPJ) values (?, ?, ?, ?, ?, ?)";
 		try {
-			System.out.println("0");
 			stmt = myCon.prepareStatement(sql);
 			stmt.setInt(1, e.getId());
 			stmt.setString(2, e.getNome());
 			stmt.setString(3, e.getDescricao());
 			stmt.setString(4, e.getData());
 			stmt.setString(5, e.getLocal());
-			System.out.println("1");
 			stmt.setInt(6, e.getOrganizador().getCpf_cnpj());
-			System.out.println("2");
 			stmt.executeUpdate();
-			System.out.println("3");
 			stmt.close();
+			JOptionPane.showMessageDialog(null, "Cadastro realizado com sucesso !", "Cadastro", JOptionPane.INFORMATION_MESSAGE);
 		} catch (SQLException z) {
 			JOptionPane.showMessageDialog(null, "Erro ao cadastrar !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -106,6 +103,7 @@ public class BD {
 			
 			stmt.executeUpdate();
 			stmt.close();
+			JOptionPane.showMessageDialog(null, "Remoção realizada com sucesso !", "Remoção", JOptionPane.INFORMATION_MESSAGE);
 		}catch(SQLException z) {
 			JOptionPane.showMessageDialog(null, "Erro ao remover !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -131,6 +129,8 @@ public class BD {
 			
 			stmt.executeUpdate();
 			stmt.close();
+			JOptionPane.showMessageDialog(null, "Alteração realizada com sucesso !", "Alterar", JOptionPane.INFORMATION_MESSAGE);
+
 		} catch (SQLException z) {
 			JOptionPane.showMessageDialog(null, "Erro ao alterar !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
