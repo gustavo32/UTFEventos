@@ -99,7 +99,7 @@ public class Cadastrar extends JFrame {
 		textField_3.setColumns(10);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(129, 237, 114, 19);
+		textField_4.setBounds(163, 237, 114, 19);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -109,7 +109,8 @@ public class Cadastrar extends JFrame {
 				Organizador org = new Organizador();
 				BD bd = new BD();
 				org = bd.consultaOrganizador(Integer.parseInt(textField_4.getText()));
-				Evento evento = new Evento(Integer.parseInt(textField.getText()), textPane.getText(), textField_1.getText(), textField_2.getText(), textField_3.getText(), org);
+				Evento evento = new Evento(Integer.parseInt(textField.getText()), textField_1.getText(), textPane.getText(), textField_2.getText(), textField_3.getText(), org);
+				bd.cadastraEvento(evento);
 			}
 		});
 		btnCadastrar.setBounds(160, 268, 117, 25);

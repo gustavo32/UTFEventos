@@ -8,9 +8,9 @@ import javax.swing.JOptionPane;
 public class BD {
 	//SGBDConnection(server, database, username, password)
 	private Evento e;
-	Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 	
 	public Organizador consultaOrganizador(int id) {
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		Organizador org = new Organizador();
 		PreparedStatement stmt = null;
 		String sql = "select * from Organizador where ORG_CPFCNPJ=(?)";
@@ -18,21 +18,30 @@ public class BD {
 		try {
 			stmt = myCon.prepareStatement(sql);
 			stmt.setInt(1, id);
+			
 			rs = stmt.executeQuery();
 			
-			org.setCpf_cnpj(rs.getInt("ORG_CPFCNPJ"));
-			org.setEmail(rs.getString("ORG_EMAIL"));
-			org.setNome(rs.getString("ORG_NOME"));
-			org.setTelefone(rs.getInt("ORG_TELEFONE"));
-			
+			while(rs.next()) {
+				org.setCpf_cnpj(rs.getInt("ORG_CPFCNPJ"));
+				
+				org.setNome(rs.getString("ORG_NOME"));
+				org.setEmail(rs.getString("ORG_EMAIL"));
+				org.setTelefone(rs.getInt("ORG_TELEFONE"));
+			}	
+			rs.close();
+			stmt.close();
 		}catch(SQLException e) {
-			JOptionPane.showMessageDialog(null, "Erro", "Organizador nao existe !", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Organizador nao existe !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return null;
+		} finally {
+			SGBDConnection.closeConnection(myCon);
 		}
+		System.out.println(org.getCpf_cnpj()+"+"+org.getEmail()+"+"+org.getNome()+"+"+org.getTelefone());
 		return org;
 	}
 	
 	public Evento consultaEvento(int id) {
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		Organizador org = new Organizador();
 		PreparedStatement stmt = null;
 		String sql = "select * from Evento where EVE_ID=(?)";
@@ -45,34 +54,40 @@ public class BD {
 			
 			rs = stmt.executeQuery();
 			
-			org = consultaOrganizador(rs.getInt("FK_ORG_CPFCNPJ"));
-			
-			e = new Evento(rs.getInt("EVE_INT"), rs.getString("EVE_NOME"), rs.getString("EVE_DESCRICAO"), rs.getString("EVE_DATA"), rs.getString("EVE_LOCAL"), org);
-			
+			while(rs.next()) {
+				org = consultaOrganizador(rs.getInt("FK_ORG_CPFCNPJ"));
+				e = new Evento(rs.getInt("EVE_ID"), rs.getString("EVE_NOME"), rs.getString("EVE_DESCRICAO"), rs.getString("EVE_DATA"), rs.getString("EVE_LOCAL"), org);
+			}
 			stmt.close();
 		}catch(SQLException z) {
-			System.out.println("Nao foi possivel encontrar o ID");
+			JOptionPane.showMessageDialog(null, "Não foi possível encontrar o ID !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return null;
+		} finally {
+			SGBDConnection.closeConnection(myCon);
 		}
-		SGBDConnection.closeConnection(myCon);
+		
 		return e;
 	}
 	public boolean cadastraEvento(Evento e) {
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		PreparedStatement stmt = null;
-		String sql = "insert into Evento (EVE_ID, EVE_NOME, EVE_DESCRICAO, EVE_DATA, EVE_LOCAL, EVE_CPFCNPJ) values (?, ?, ?, ?, ?, ?)";
+		String sql = "insert into Evento (EVE_ID, EVE_NOME, EVE_DESCRICAO, EVE_DATA, EVE_LOCAL, FK_ORG_CPFCNPJ) values (?, ?, ?, ?, ?, ?)";
 		try {
+			System.out.println("0");
 			stmt = myCon.prepareStatement(sql);
 			stmt.setInt(1, e.getId());
 			stmt.setString(2, e.getNome());
 			stmt.setString(3, e.getDescricao());
 			stmt.setString(4, e.getData());
 			stmt.setString(5, e.getLocal());
+			System.out.println("1");
 			stmt.setInt(6, e.getOrganizador().getCpf_cnpj());
-			
+			System.out.println("2");
 			stmt.executeUpdate();
+			System.out.println("3");
 			stmt.close();
 		} catch (SQLException z) {
-			System.out.println("Erro na requisicao sql !");
+			JOptionPane.showMessageDialog(null, "Erro ao cadastrar !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
 		} finally {
 			SGBDConnection.closeConnection(myCon);
@@ -82,6 +97,7 @@ public class BD {
 	}
 	
 	public boolean removeEvento(Evento e) {
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		PreparedStatement stmt = null;
 		String sql = "delete from Evento where EVE_ID = (?)";
 		try {
@@ -91,15 +107,17 @@ public class BD {
 			stmt.executeUpdate();
 			stmt.close();
 		}catch(SQLException z) {
-			System.out.println("Erro na requisicao sql !");
+			JOptionPane.showMessageDialog(null, "Erro ao remover !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
+		} finally {
+			SGBDConnection.closeConnection(myCon);
 		}
-		SGBDConnection.closeConnection(myCon);
+
 		return true;
 	}
 	
 	public boolean alteraEvento(Evento e) {
-		
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		PreparedStatement stmt = null;
 		String sql = "update Evento set EVE_NOME=(?), EVE_DESCRICAO=(?), EVE_DATA=(?), EVE_LOCAL=(?), EVE_CPFCNPJ=(?) where EVE_ID=(?)";
 		try {
@@ -114,7 +132,7 @@ public class BD {
 			stmt.executeUpdate();
 			stmt.close();
 		} catch (SQLException z) {
-			System.out.println("Erro na requisicao sql !");
+			JOptionPane.showMessageDialog(null, "Erro ao alterar !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
 		} finally {
 			SGBDConnection.closeConnection(myCon);
