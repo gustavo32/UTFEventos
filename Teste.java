@@ -8,9 +8,12 @@ import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSeparator;
+import java.awt.Color;
 
 public class Teste extends JFrame {
 
@@ -31,7 +34,8 @@ public class Teste extends JFrame {
 			}
 		});
 	}
-
+	JMenu mnArquivo;
+	private JMenuItem mntmLogin;
 	/**
 	 * Create the frame.
 	 */
@@ -42,8 +46,10 @@ public class Teste extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnArquivo = new JMenu("Arquivo");
+		mnArquivo = new JMenu("Arquivo");
+		mnArquivo.setEnabled(false);
 		menuBar.add(mnArquivo);
+		
 		
 		JMenuItem mntmCadastrarEvento = new JMenuItem("Cadastrar Evento");
 		mntmCadastrarEvento.addActionListener(new ActionListener() {
@@ -57,11 +63,46 @@ public class Teste extends JFrame {
 		JMenuItem mntmConsultarEvento = new JMenuItem("Consultar Evento");
 		mnArquivo.add(mntmConsultarEvento);
 		
-		JMenuItem menuItem = new JMenuItem("------------");
-		mnArquivo.add(menuItem);
+		JSeparator separator_4 = new JSeparator();
+		mnArquivo.add(separator_4);
 		
 		JMenuItem mntmSair = new JMenuItem("Sair");
 		mnArquivo.add(mntmSair);
+		
+		JMenu mnAjuda = new JMenu("Ajuda");
+		menuBar.add(mnAjuda);
+		
+		JMenuItem mntmSobre = new JMenuItem("Sobre");
+		mnAjuda.add(mntmSobre);
+		
+		JMenuItem mntmFaq = new JMenuItem("FAQ");
+		mnAjuda.add(mntmFaq);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(Color.WHITE);
+		menuBar.add(separator);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setForeground(Color.WHITE);
+		menuBar.add(separator_1);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setForeground(Color.WHITE);
+		menuBar.add(separator_2);
+		
+		JSeparator separator_3 = new JSeparator();
+		separator_3.setForeground(Color.WHITE);
+		menuBar.add(separator_3);
+		
+		mntmLogin = new JMenuItem("Login");
+		mntmLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Login login = new Login();
+				login.setVisible(true);
+				dispose();
+			}
+		});
+		menuBar.add(mntmLogin);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -70,5 +111,15 @@ public class Teste extends JFrame {
 		JList list = new JList();
 		list.setBounds(0, 0, 448, 254);
 		contentPane.add(list);
+	}
+	
+	public void setMnArquivoEnabled(boolean enabled) {
+		mnArquivo.setEnabled(enabled);
+	}
+	public boolean getMntmLoginEnabled() {
+		return mntmLogin.isEnabled();
+	}
+	public void setMntmLoginEnabled(boolean enabled_1) {
+		mntmLogin.setEnabled(enabled_1);
 	}
 }
