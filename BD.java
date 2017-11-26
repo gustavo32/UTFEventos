@@ -3,36 +3,49 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
+
 public class BD {
 	//SGBDConnection(server, database, username, password)
 	private Evento e;
 	Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 	
-
+	public Organizador consultaOrganizador(int id) {
+		Organizador org = new Organizador();
+		PreparedStatement stmt = null;
+		String sql = "select * from Organizador where ORG_CPFCNPJ=(?)";
+		ResultSet rs = null;
+		try {
+			stmt = myCon.prepareStatement(sql);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			
+			org.setCpf_cnpj(rs.getInt("ORG_CPFCNPJ"));
+			org.setEmail(rs.getString("ORG_EMAIL"));
+			org.setNome(rs.getString("ORG_NOME"));
+			org.setTelefone(rs.getInt("ORG_TELEFONE"));
+			
+		}catch(SQLException e) {
+			JOptionPane.showMessageDialog(null, "Erro", "Organizador nao existe !", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		return org;
+	}
+	
 	public Evento consultaEvento(int id) {
 		Organizador org = new Organizador();
 		PreparedStatement stmt = null;
-		PreparedStatement stmt2 = null;
 		String sql = "select * from Evento where EVE_ID=(?)";
-		String sql2 = "select * from Organizador where ORG_CPFCNPJ=(?)";
+
 		ResultSet rs = null;
-		ResultSet rs2 = null;
 		try {
 			stmt = myCon.prepareStatement(sql);
-			stmt2 = myCon.prepareStatement(sql2);
 			
 			stmt.setInt(1, id);
 			
 			rs = stmt.executeQuery();
 			
-			stmt2.setInt(1, rs.getInt("FK_ORG_CPFCNPJ"));
-			
-			rs2 = stmt2.executeQuery();
-			
-			org.setCpf_cnpj(rs2.getInt("ORG_CPFCNPJ"));
-			org.setEmail(rs2.getString("ORG_EMAIL"));
-			org.setNome(rs2.getString("ORG_NOME"));
-			org.setTelefone(rs2.getInt("ORG_TELEFONE"));
+			org = consultaOrganizador(rs.getInt("FK_ORG_CPFCNPJ"));
 			
 			e = new Evento(rs.getInt("EVE_INT"), rs.getString("EVE_NOME"), rs.getString("EVE_DESCRICAO"), rs.getString("EVE_DATA"), rs.getString("EVE_LOCAL"), org);
 			
