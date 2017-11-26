@@ -6,10 +6,10 @@ public abstract class Pessoa {
 	public void setNome(String nome){
 		this.nome = nome;
 	}
-	public void setId(String email){
+	public void setEmail(String email){
 		this.email = email;
 	}
-	public void setId(int telefone){
+	public void setTelefone(int telefone){
 		this.telefone = telefone;
 	}
 	public String getNome(){
