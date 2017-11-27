@@ -8,9 +8,9 @@ CREATE TABLE Organizador(
 
 CREATE TABLE Evento(
 	EVE_ID int,
-	EVE_NOME varchar(100),
+	EVE_NOME varchar(100) not null,
 	EVE_DESCRICAO varchar(250),
-	EVE_DATA varchar(30),
+	EVE_DATA varchar(30) not null,
 	EVE_LOCAL varchar (60),
 	FK_ORG_CPFCNPJ int,
 	foreign key(FK_ORG_CPFCNPJ) references Organizador(ORG_CPFCNPJ),

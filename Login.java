@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Login extends JFrame {
 
@@ -40,9 +42,10 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		
 		setFont(new Font("Liberation Sans", Font.ITALIC, 14));
 		setTitle("Login");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 238, 132);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -77,11 +80,23 @@ public class Login extends JFrame {
 					t.setMntmLoginEnabled(false);
 					t.setVisible(true);
 					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Usuario ou Senha incorreto(s) !");
 				}
 			}
 		});
-		btnEntrar.setBounds(59, 70, 117, 25);
+		btnEntrar.setBounds(132, 68, 78, 25);
 		contentPane.add(btnEntrar);
+		
+		JButton btnSair = new JButton("Sair");
+		btnSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Teste t = new Teste();
+				t.setVisible(true);
+				dispose();
+			}
+		});
+		btnSair.setBounds(22, 68, 70, 25);
+		contentPane.add(btnSair);
 	}
-
 }
