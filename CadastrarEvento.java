@@ -1,19 +1,16 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
-import java.awt.Window.Type;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class Cadastrar extends JFrame {
+public class CadastrarEvento extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -29,7 +26,7 @@ public class Cadastrar extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Cadastrar frame = new Cadastrar();
+					CadastrarEvento frame = new CadastrarEvento();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,7 +38,7 @@ public class Cadastrar extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Cadastrar() {
+	public CadastrarEvento() {
 		setTitle("Cadastrar Evento");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 330);
@@ -71,7 +68,7 @@ public class Cadastrar extends JFrame {
 		contentPane.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_5 = new JLabel("CPF/CNPJ Organizador");
-		lblNewLabel_5.setBounds(12, 239, 107, 15);
+		lblNewLabel_5.setBounds(12, 239, 169, 15);
 		contentPane.add(lblNewLabel_5);
 		
 		textField = new JTextField();
@@ -99,7 +96,7 @@ public class Cadastrar extends JFrame {
 		textField_3.setColumns(10);
 		
 		textField_4 = new JTextField();
-		textField_4.setBounds(163, 237, 114, 19);
+		textField_4.setBounds(180, 237, 114, 19);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
@@ -110,7 +107,9 @@ public class Cadastrar extends JFrame {
 				BD bd = new BD();
 				org = bd.consultaOrganizador(Integer.parseInt(textField_4.getText()));
 				Evento evento = new Evento(Integer.parseInt(textField.getText()), textField_1.getText(), textPane.getText(), textField_2.getText(), textField_3.getText(), org);
-				bd.cadastraEvento(evento);
+				if(bd.cadastraEvento(evento)) {
+					dispose();
+				}
 			}
 		});
 		btnCadastrar.setBounds(160, 268, 117, 25);

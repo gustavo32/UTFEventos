@@ -1,14 +1,11 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -54,19 +51,30 @@ public class Teste extends JFrame {
 		JMenuItem mntmCadastrarEvento = new JMenuItem("Cadastrar Evento");
 		mntmCadastrarEvento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Cadastrar cad = new Cadastrar();
-				cad.setVisible(true);
+				CadastrarEvento cadE = new CadastrarEvento();
+				cadE.setVisible(true);
 			}
 		});
 		mnArquivo.add(mntmCadastrarEvento);
 		
-		JMenuItem mntmConsultarEvento = new JMenuItem("Consultar Evento");
+		JMenuItem mntmConsultarEvento = new JMenuItem("Cadastrar Organizador");
+		mntmConsultarEvento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				CadastrarOrganizador cadO = new CadastrarOrganizador();
+				cadO.setVisible(true);
+			}
+		});
 		mnArquivo.add(mntmConsultarEvento);
 		
 		JSeparator separator_4 = new JSeparator();
 		mnArquivo.add(separator_4);
 		
 		JMenuItem mntmSair = new JMenuItem("Sair");
+		mntmSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
 		mnArquivo.add(mntmSair);
 		
 		JMenu mnAjuda = new JMenu("Ajuda");
