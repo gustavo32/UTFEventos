@@ -78,6 +78,7 @@ public class Login extends JFrame {
 					Teste t = new Teste();
 					t.setMnArquivoEnabled(true);
 					t.setMntmLoginEnabled(false);
+					t.setAdmin(true);
 					t.setVisible(true);
 					dispose();
 				} else {

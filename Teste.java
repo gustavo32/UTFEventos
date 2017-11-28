@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -8,14 +9,24 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JList;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JSeparator;
 import java.awt.Color;
+import java.awt.SystemColor;
+import javax.swing.UIManager;
+import javax.swing.JButton;
 
 public class Teste extends JFrame {
 
 	private JPanel contentPane;
-
+	static DefaultListModel<String> listModel = new DefaultListModel<String>();
+	static ArrayList<Evento> eventArray = new ArrayList<Evento>();
+	BD bd = new BD();
+	
+	static boolean admin=false;
 	/**
 	 * Launch the application.
 	 */
@@ -37,6 +48,8 @@ public class Teste extends JFrame {
 	 * Create the frame.
 	 */
 	public Teste() {
+		setTitle("UTFEventos");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
@@ -77,15 +90,6 @@ public class Teste extends JFrame {
 		});
 		mnArquivo.add(mntmSair);
 		
-		JMenu mnAjuda = new JMenu("Ajuda");
-		menuBar.add(mnAjuda);
-		
-		JMenuItem mntmSobre = new JMenuItem("Sobre");
-		mnAjuda.add(mntmSobre);
-		
-		JMenuItem mntmFaq = new JMenuItem("FAQ");
-		mnAjuda.add(mntmFaq);
-		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.WHITE);
 		menuBar.add(separator);
@@ -103,6 +107,8 @@ public class Teste extends JFrame {
 		menuBar.add(separator_3);
 		
 		mntmLogin = new JMenuItem("Login");
+		mntmLogin.setForeground(SystemColor.activeCaptionText);
+		mntmLogin.setBackground(UIManager.getColor("CheckBoxMenuItem.background"));
 		mntmLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Login login = new Login();
@@ -117,8 +123,38 @@ public class Teste extends JFrame {
 		contentPane.setLayout(null);
 		
 		JList list = new JList();
-		list.setBounds(0, 0, 448, 254);
+		list.setBounds(0, 0, 448, 228);
 		contentPane.add(list);
+		list.setModel(listModel);
+		
+		JButton btnAtualizar = new JButton("Atualizar");
+		btnAtualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				listModel.clear();
+				eventArray=bd.consultaEvento();
+				for(int i=0;i<eventArray.size();i++) {
+					listModel.addElement(eventArray.get(i).getData() + "     " + eventArray.get(i).getNome() + "       " + eventArray.get(i).getLocal());
+				}
+			}
+		});
+		btnAtualizar.setBounds(0, 229, 448, 25);
+		contentPane.add(btnAtualizar);
+		
+	/*	eventArray=bd.consultaEvento();
+		for(int i=0;i<eventArray.size();i++) {
+			listModel.addElement(eventArray.get(i).getData() + "     " + eventArray.get(i).getNome() + "       " + eventArray.get(i).getLocal());
+		}
+		*/
+		list.addMouseListener(new MouseAdapter() {
+		    public void mouseClicked(MouseEvent evt) {
+		        if (evt.getClickCount() == 2) {
+		            // Double-click detected
+							Evento selEvent = eventArray.get(list.getSelectedIndex());
+							@SuppressWarnings("unused")
+							EventWindow ew = new EventWindow(selEvent);
+		        }
+		    }
+		});
 	}
 	
 	public void setMnArquivoEnabled(boolean enabled) {
@@ -127,6 +163,15 @@ public class Teste extends JFrame {
 	public boolean getMntmLoginEnabled() {
 		return mntmLogin.isEnabled();
 	}
+	
+	public void setAdmin(boolean admin) {
+		Teste.admin=admin;
+	}
+	
+	public static boolean getAdmin() {
+		return admin;
+	}
+	
 	public void setMntmLoginEnabled(boolean enabled_1) {
 		mntmLogin.setEnabled(enabled_1);
 	}
