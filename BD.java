@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -22,6 +23,7 @@ public class BD {
 			stmt.setInt(4, o.getTelefone());
 			stmt.executeUpdate();
 			stmt.close();
+			JOptionPane.showMessageDialog(null, "Organizador cadastrado com sucesso !", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
 		} catch (SQLException z) {
 			JOptionPane.showMessageDialog(null, "Erro ao cadastrar !", "Erro", JOptionPane.ERROR_MESSAGE);
 			return false;
@@ -139,6 +141,34 @@ public class BD {
 		
 		return e;
 	}
+	
+	public ArrayList<Evento> consultaEvento() {
+		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
+		PreparedStatement stmt = null;
+		String sql = "select * from Evento";
+		ArrayList<Evento> eventArray = new ArrayList<Evento>();
+		ResultSet rs = null;
+		try {
+			stmt = myCon.prepareStatement(sql);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				Organizador org = new Organizador();
+				org = consultaOrganizador(rs.getInt("FK_ORG_CPFCNPJ"));
+				Evento e = new Evento(rs.getInt("EVE_ID"), rs.getString("EVE_NOME"), rs.getString("EVE_DESCRICAO"), rs.getString("EVE_DATA"), rs.getString("EVE_LOCAL"), org);
+				eventArray.add(e);
+			}
+			stmt.close();
+		}catch(SQLException z) {
+			JOptionPane.showMessageDialog(null, "Nenhum registro !", "Erro", JOptionPane.ERROR_MESSAGE);
+			return null;
+		} finally {
+			SGBDConnection.closeConnection(myCon);
+		}
+		
+		return eventArray;
+	}
+	
 	public boolean cadastraEvento(Evento e) {
 		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		PreparedStatement stmt = null;
@@ -188,7 +218,7 @@ public class BD {
 	public boolean alteraEvento(Evento e) {
 		Connection myCon = SGBDConnection.getConnection("localhost", "bdeventos", "root", "123");
 		PreparedStatement stmt = null;
-		String sql = "update Evento set EVE_NOME=(?), EVE_DESCRICAO=(?), EVE_DATA=(?), EVE_LOCAL=(?), EVE_CPFCNPJ=(?) where EVE_ID=(?);";
+		String sql = "update Evento set EVE_NOME=(?), EVE_DESCRICAO=(?), EVE_DATA=(?), EVE_LOCAL=(?), FK_ORG_CPFCNPJ=(?) where EVE_ID=(?);";
 		try {
 			stmt = myCon.prepareStatement(sql);
 			stmt.setString(1, e.getNome());
